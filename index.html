@@ -1,15 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Bhumika!</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/three@0.138.3/build/three.min.js"></script>
-</head>
-<body>
-    <div id="container"></div>
+// Make sure to import FontLoader correctly
+import { FontLoader } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/FontLoader.js';
 
-    <script src="script.js"></script>
-</body>
-</html>
+// Initialize the scene, camera, renderer, etc.
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Load a font
+const loader = new THREE.FontLoader();
+
+// Correct path to a font (helvetiker_regular.typeface.json)
+const fontPath = 'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json';
+
+loader.load(fontPath, function (font) {
+    // Once the font is loaded, create a text geometry
+    const textGeometry = new THREE.TextGeometry('Happy Birthday Bhumika!', {
+        font: font,
+        size: 10,
+        height: 1
+    });
+
+    const textMaterial = new THREE.MeshBasicMaterial({ color: 0xff6347 });
+    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+    // Add the text to the scene
+    scene.add(textMesh);
+    
+    // Position the text in the scene
+    textMesh.position.set(-50, 0, 0);
+
+    // Animate the scene
+    animate();
+}, undefined, function (error) {
+    console.error('Error loading font:', error);
+});
+
+// Set camera position
+camera.position.z = 100;
+
+// Animation loop
+function animate() {
+    requestAnimationFrame(animate);
+
+    // Rotate the text for animation
+    scene.rotation.x += 0.01;
+    scene.rotation.y += 0.01;
+
+    renderer.render(scene, camera);
+}
